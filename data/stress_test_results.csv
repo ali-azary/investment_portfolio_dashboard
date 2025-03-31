@@ -1,0 +1,5 @@
+Scenario,Portfolio,Cumulative Return,Max Drawdown
+2008 Financial Crisis,Unconstrained,-0.0938,-0.1965
+2008 Financial Crisis,Constrained,-0.0987,-0.1988
+COVID Crash,Unconstrained,-0.0122,-0.1374
+COVID Crash,Constrained,-0.0135,-0.1397

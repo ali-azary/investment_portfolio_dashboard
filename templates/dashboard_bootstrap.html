@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Portfolio Analysis Dashboard</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<style>
+  body { background: #f8f9fa; }
+  .card { margin-bottom: 1rem; }
+  img { border: 1px solid #dee2e6; border-radius: .25rem; }
+  table { font-size: .875rem; }
+</style>
+</head>
+<body>
+
+<nav class="navbar navbar-dark bg-primary mb-4">
+  <div class="container">
+    <a class="navbar-brand" href="#">Portfolio Anlysis Dashboard</a>
+    <span class="navbar-text">As of {{ date }}</span>
+  </div>
+</nav>
+
+<div class="container">
+
+  <!-- KPI Cards -->
+  <div class="row text-center mb-4">
+    {% for label, value in {"CAGR":CAGR, "Volatility":Volatility, "Sharpe":Sharpe, "Sortino":Sortino}.items() %}
+    <div class="col-md-3">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <h6 class="card-title">{{ label }}</h6>
+          <h2 class="card-text">{{ value }}{% if label!="Sharpe" %}%{% endif %}</h2>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+  <!-- Tables Row -->
+  <div class="row mb-5">
+    <div class="col-lg-6">
+      <div class="card">
+        <div class="card-header">Annual Expected Returns</div>
+        <div class="card-body">{{ annual_returns | safe }}</div>
+      </div>
+    </div>
+    <div class="col-lg-6">
+      <div class="card">
+        <div class="card-header">Covariance Matrix</div>
+        <div class="card-body">{{ annual_cov | safe }}</div>
+      </div>
+    </div>
+    <div class="col-lg-12">
+      <div class="card">
+        <div class="card-header">Optimal Portfolio Weights</div>
+        <div class="card-body">{{ weights | safe }}</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Charts Row -->
+  <div class="row mb-5">
+    <div class="col-lg-6 mb-4">
+      <div class="card">
+        <div class="card-header">Efficient Frontier</div>
+        <img src="assets/efficient_frontier.png" class="card-img-bottom" alt="Efficient Frontier">
+      </div>
+    </div>
+    <div class="col-lg-6 mb-4">
+      <div class="card">
+        <div class="card-header">Cumulative Performance</div>
+        <img src="assets/cumulative_performance.png" class="card-img-bottom" alt="Cumulative Performance">
+      </div>
+    </div>
+    
+    
+    <div class="col-lg-6">
+      <div class="card">
+        <div class="card-header">Cumulative Return by Scenario</div>
+        <img src="assets/cumulative_return.png" class="card-img-bottom" alt="Cumulative Return">
+      </div>
+    </div>
+    <div class="col-lg-6">
+      <div class="card">
+        <div class="card-header">Max Drawdown by Scenario</div>
+        <img src="assets/max_drawdown.png" class="card-img-bottom" alt="Max Drawdown">
+      </div>
+    </div>
+  </div>
+
+  <!-- Stress‑Test Table -->
+  <div class="row mb-5">
+    <div class="col-lg-12">
+      <div class="card">
+        <div class="card-header">Stress‑Test Results</div>
+        <div class="card-body">{{ stress_table | safe }}</div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="row mb-5">
+    <div class="col-lg-12">
+      <div class="card">
+        <div class="card-header">Correlation Heatmap (Interactive)</div>
+        <div class="card-body">
+          <iframe src="assets/corr_heatmap.html" width="100%" height="600" frameborder="0"></iframe>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- VaR & CVaR Summary -->
+  <div class="row mb-5">
+    <div class="col-lg-12">
+      <div class="card">
+        <div class="card-header">VaR & CVaR Summary</div>
+        <div class="card-body">
+          {{ var_table | safe }}
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-6 mt-3">
+      <img src="{{ var_plot }}" class="img-fluid" alt="VaR Plot">
+    </div>
+    <div class="col-lg-6 mt-3">
+      <img src="{{ cvar_plot }}" class="img-fluid" alt="CVaR Plot">
+    </div>
+  </div>
+
+  <!-- Brinson Attribution: Table and Plot Side by Side -->
+  <div class="row mb-5">
+    <div class="col-lg-6">
+      <div class="card">
+        <div class="card-header">Brinson Attribution - Table</div>
+        <div class="card-body">{{ brinson_table | safe }}</div>
+      </div>
+    </div>
+    <div class="col-lg-6">
+      <div class="card">
+        <div class="card-header">Brinson Attribution - Plot</div>
+        <img src="{{ brinson_plot }}" class="card-img-bottom" alt="Brinson Attribution">
+      </div>
+    </div>
+  </div>
+
+  <!-- Monte Carlo Forecast: Summary and Histogram Side by Side -->
+  <div class="row mb-5">
+    <div class="col-lg-6">
+      <div class="card">
+        <div class="card-header">Monte Carlo Forecast - Summary</div>
+        <div class="card-body">{{ mc_summary | safe }}</div>
+      </div>
+    </div>
+    <div class="col-lg-6">
+      <div class="card">
+        <div class="card-header">Monte Carlo Forecast - Histogram</div>
+        <img src="{{ mc_plot }}" class="card-img-bottom" alt="Monte Carlo Forecast">
+      </div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
